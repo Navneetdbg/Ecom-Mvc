@@ -1,0 +1,163 @@
+﻿.flipcart {
+    border-bottom-color: rgb(240, 240, 240);
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    box-sizing: border-box;
+    color: rgb(33, 33, 33);
+    display: flex;
+    font-family: Roboto, Arial, sans-serif;
+    font-size: 14px;
+    justify-content: space-between;
+    letter-spacing: 0px;
+    line-height: 19.6px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
+    min-height: 47px;
+    padding-bottom: 0px;
+    padding-left: 25px;
+    padding-right: 31px;
+    padding-top: 16px;
+}
+
+.fliptop {
+    background-color: rgb(255, 255, 255);
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 2px 0px;
+    box-sizing: border-box;
+    color: rgb(33, 33, 33);
+    font-family: Roboto, Arial, sans-serif;
+    font-size: 14px;
+    letter-spacing: 0px;
+    line-height: 19.6px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 0px;
+    width: 1500px;
+}
+
+.flipmiddle {
+    box-sizing: border-box;
+    color: rgb(33, 33, 33);
+    font-family: Roboto, Arial, sans-serif;
+    font-size: 14px;
+    letter-spacing: 0px;
+    line-height: 19.6px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
+    padding-bottom: 36px;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 30px;
+    text-align: center;
+}
+.flipimg {
+    border-bottom-color: rgb(33, 33, 33);
+    border-bottom-style: none;
+    border-bottom-width: 0px;
+    border-image-outset: 0;
+    border-image-repeat: stretch stretch;
+    border-image-slice: 100%;
+    border-image-source: none;
+    border-image-width: 1;
+    border-left-color: rgb(33, 33, 33);
+    border-left-style: none;
+    border-left-width: 0px;
+    border-right-color: rgb(33, 33, 33);
+    border-right-style: none;
+    border-right-width: 0px;
+    border-top-color: rgb(33, 33, 33);
+    border-top-style: none;
+    border-top-width: 0px;
+    box-sizing: border-box;
+    color: rgb(33, 33, 33);
+    font-family: Roboto, Arial, sans-serif;
+    font-size: 14px;
+    height: 300px;
+    letter-spacing: 0px;
+    line-height: 19.6px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
+    outline-color: rgb(33, 33, 33);
+    outline-style: none;
+    outline-width: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 0px;
+    text-align: center;
+    text-decoration: none;
+    text-decoration-color: rgb(33, 33, 33);
+    text-decoration-line: none;
+    text-decoration-style: solid;
+}
+
+.flipadd {
+    box-sizing: border-box;
+    color: rgb(33, 33, 33);
+    font-family: Roboto, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0px;
+    line-height: 22.4px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 0px;
+    text-transform: uppercase;
+}
+
+.flipadd {
+    box-sizing: border-box;
+    color: rgb(33, 33, 33);
+    display: block;
+    font-family: Roboto, Arial, sans-serif;
+    font-size: 18px;
+    letter-spacing: 0px;
+    line-height: 25.2px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 24px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 0px;
+    text-align: center;
+}
+
+.flipWish {
+    box-sizing: border-box;
+    color: rgb(40, 116, 240);
+    display: block;
+    font-family: Roboto, Arial, sans-serif;
+    font-size: 16px;
+    letter-spacing: 0px;
+    line-height: 22.4px;
+    bundle .069eaa.css:1 body 1.4 margin-bottom: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 35px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 0px;
+    text-align: center;
+}

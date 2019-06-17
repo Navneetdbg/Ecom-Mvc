@@ -1,0 +1,120 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+}
+<br />
+<br />
+
+
+<h2>Create</h2>
+
+<form method="post" class="form-control" id="frmcat">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label>Name</label>
+                <input name="Name" class="form-control" />
+
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <input name="Description" class="form-control" />
+            </div>
+            <div class="form-group">
+                <div class="product_image">
+                    <label>Image</label>
+                    <input type="text" id="ImageURL" name="ImageURL" class="form-control" placeholder="Name of Image" />
+
+                </div>
+
+            </div>
+            <div class="form-group">
+                <div class="product_image">
+                    <label>Image 2</label>
+                    <input type="text" id="ImageURL" name="ImageURL2" class="form-control" placeholder="Name of Image" />
+
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label>Is Featured</label>
+                <br />
+                <div class="row">
+                    <div class="col-md-6">
+                        True  <input type="radio" name="IsFetured" value="true" />
+                    </div>
+
+                    <div class="col-md-6">
+                        False   <input type="radio" name="IsFetured" value="false" />
+                    </div>
+                </div>
+
+                <button type="button" id="btnnewsave" class="btn btn-success"><i class="fa fa-floppy-o" aria-hidden="true"></i>&nbsp;Save</button>
+            </div>
+
+            <div class="form-group">
+                <label>In IndexPage</label>
+                <br />
+                <div class="row">
+                    <div class="col-md-6">
+                        True  <input type="radio" name="IndexPage" value="true" />
+                    </div>
+
+                    <div class="col-md-6">
+                        False   <input type="radio" name="IndexPage" value="false" />
+                    </div>
+                </div>
+
+                <button type="button" id="btnnewsave" class="btn btn-success"><i class="fa fa-floppy-o" aria-hidden="true"></i>&nbsp;Save</button>
+            </div>
+        </div>
+        <div class="col-md-4">
+
+            <img id="categoryImage" class="form-control">
+
+        </div>
+    </div>
+</form>
+
+<script>
+    $("#frmcat").validate({
+        rules: {
+            Name: {
+                required: true,
+                minlength: 3,
+
+                maxlength: 50
+            },
+            Description: {
+                maxlength: 5000
+            }
+        },
+        messages: {
+            Name: {
+                required: 'Product Name is Required',
+                minlength: 'Minimun lenght of product Should be 3',
+                maxlength: 'Maximum lenght of product Should be 50'
+            },
+            Description: {
+                maxlength: 'Maximum lenght of product Should be 5000'
+            }
+        }
+    });
+    $("#btnnewsave").click(function () {
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Create","Category")',
+            data: $("#frmcat").serialize()
+
+        }).done(function (response) {
+            $("#tblcat").html(response);
+            $("#newatncon").html("");
+
+
+        }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+            alert("F");
+        });
+
+    });
+</script>

@@ -1,0 +1,162 @@
+﻿@model RealBazzar.web.ViewModel.EditProductViewModel
+@{
+
+
+    ViewBag.Title = "Edit";
+    var trueChecked = Model.IsFeatured ? "checked" : string.Empty;
+    var falseChecked = !Model.IsFeatured ? "checked" : string.Empty;
+    var ntrueChecked = Model.BestSeller ? "checked" : string.Empty;
+    var nfalseChecked = !Model.BestSeller ? "checked" : string.Empty;
+
+    var ntrue = Model.dealofday ? "checked" : string.Empty;
+    var nfalse = !Model.dealofday ? "checked" : string.Empty;
+}
+
+<br/>
+<br/>
+<h5>Edit Product</h5>
+
+<form id="frmed" class="form-control">
+    <div class="row">
+        <div class="col-md-8">
+
+            <input type="hidden" name="Id" value="@Model.Id" />
+            <div class="form-group">
+                <label>Category</label>
+                <select name="CategoryId" class="form-control">
+                    @foreach (var item in Model.Availablecategories)
+            {
+                <option value="@item.Id">@item.Name</option>
+    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Name</label>
+                <input name="Name" value="@Model.Name" class="form-control" />
+
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <input name="Description" value="@Model.Description" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label>Price</label>
+                <input name="Price" value="@Model.Price" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label>CostPrice</label>
+                <input name="CostPrice" class="form-control" placeholder="@Model.CostPrice" />
+            </div>
+            <div class="form-group">
+                <label>Is Featured</label>
+                <br />
+                <div class="row">
+                    <div class="col-md-6">
+                        True <input name="IsFeatured" type="radio" value="true" @trueChecked />
+                    </div>
+                    <div class="col-md-6">
+                        False <input name="IsFeatured" type="radio" value="false" @falseChecked />
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="form-group">
+                <label>Is BestSeller</label><br />
+                <div class="row">
+                    <div class="col-md-6">
+                        <input name="BestSeller" type="radio" value="true" @ntrueChecked />True
+                    </div>
+                    <div class="col-md-6">
+                        <input name="BestSeller" type="radio" value="false" @nfalseChecked />False
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="form-group">
+                <label>Is BestSeller</label><br />
+                <div class="row">
+                    <div class="col-md-6">
+                        <input name="dealofday" type="radio" value="true" @ntrue />True
+                    </div>
+                    <div class="col-md-6">
+                        <input name="dealofday" type="radio" value="false" @nfalse />False
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="form-group">
+                <label>Image 1</label>
+                <input name="ImageURL" class="form-control" value="@Model.ImageUrl" />
+            </div>
+            <div class="form-group">
+                <label>Image 2</label>
+                <input name="ImageURL2" class="form-control" value="@Model.ImageUrl2" />
+            </div>
+            <div class="form-group">
+                <label>Image 3</label>
+                <input name="ImageURL3" class="form-control" value="@Model.ImageUrl3" />
+            </div>
+            <button type="button" id="btnUpdate" class="btn btn-default">
+                <i class="fa fa-wrench" aria-hidden="true"></i>
+                Update
+            </button>
+
+        </div>
+        <div class="col-md-4">
+            <img/>
+        </div>
+    </div>
+</form>
+<script>
+    $("#frmed").validate({
+        rules: {
+            Name: {
+                required: true,
+                minlength: 3,
+
+                maxlength: 50
+            },
+            Description: {
+                maxlength: 5000
+            },
+            Price: {
+                range: [1, 5000000]
+            }
+        },
+        messages: {
+            Name: {
+                required: 'Product Name is Required',
+                minlength: 'Minimun lenght of product Should be 3',
+                maxlength: 'Maximum lenght of product Should be 50'
+            },
+            Description: {
+                maxlength: 'Maximum lenght of product Should be 5000'
+            },
+            Price: {
+                range: 'Price Should be between the Range'
+            }
+        }
+    });
+    $("#btnUpdate").click(function () {
+
+       $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Edit", "Product")',
+            data: $("#frmed").serialize()
+
+        }).done(function (response) {
+            $("#tblres").html(response);
+            $("#atncon").html("");
+          
+
+        }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+            alert("Fut");
+        });
+
+    });
+</script>

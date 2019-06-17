@@ -1,0 +1,136 @@
+﻿@model RealBazzar.web.ViewModel.CheckoutViewModel
+@{
+    ViewBag.Title = "WishList";
+}
+
+@if (Model != null && Model.CheckoutProduct != null && Model.CheckoutProduct.Count > 0)
+{
+    var i = 1;
+    <div class="new_arrivals" id="form1">
+        <div class="container">
+            <div class="row">
+                <div class="col text-center">
+                    <div class="section_title new_arrivals_title">
+                        <h3>Product</h3>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <br />
+            <br />
+            <div>
+
+                <br />
+            </div>
+            <div>
+                <table class="table table-hover form-group" id="ProductData">
+                    <thead>
+                        <tr>
+                            <td></td>
+                            <td>Product Name</td>
+                            <td>Image</td>
+                            <td>Price</td>
+                            <td>Action</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var item in Model.CheckoutProduct)
+                        {
+
+                            <tr>
+                                <td>@i</td>
+                                <td class="text-success"><a href="@Url.Action("Details","Product",new { Id= item.Id})">@item.Name</a></td>
+                                <td>
+                                    <img src="~/Content/images/@item.ImageURL" style="width:100px;height:100px" />
+                                </td>
+                                <td>@item.Price</td>
+                                <td>
+                                    <div class="btn btn-default" style="background-color:#fe4c50;margin-left:20px;"><a href="#" class="butCart" data-id="@item.Id" style="color:whitesmoke"><i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;Add to cart</a></div>
+                                    <div class="btn btn-default" style="background-color:#fe4c50;margin-left:20px;"><a href="#" class="RemovefromWishlist" data-id="@item.Id" style="color:whitesmoke"><i class="fa fa-times" aria-hidden="true"></i>&nbsp;Remove from WishList</a></div>
+
+                                </td>
+                            </tr>
+                            i++;
+                        }
+
+
+
+                    </tbody>
+                </table>
+
+                @*<div>
+                        @if (Model.pager != null)
+
+                        {
+                            if (Model.pager.CurrenPage > 1)
+                            {
+                                <button class="pageBtn btn btn-default" data-pagevalue="1"><<</button>
+                                <button class="pageBtn btn btn-default" data-pagevalue="@(Model.pager.CurrenPage - 1) "><</button>
+                            }
+                            for (var page = Model.pager.StartPage; page <= Model.pager.EndPage; page++)
+                            {
+                                string activeClass = Model.pager.CurrenPage == page ? "active bg-info" : string.Empty;
+                                <button class="pageBtn @(activeClass) btn btn-danger" data-pagevalue="@page">@page</button>
+                            }
+                            if (Model.pager.CurrenPage < Model.pager.TotalPage)
+                            {
+                                <button class="pageBtn btn btn-default" data-pagevalue="@(Model.pager.CurrenPage + 1)">></button>
+                                <button class="pageBtn btn btn-default" data-pagevalue="@Model.pager.EndPage">>></button>
+
+                            }
+
+
+                        }
+                    </div>*@
+            </div>
+        </div>
+    </div>
+    <script>
+        var Productcartlist;
+
+        $(".RemovefromWishlist").click(function () {
+            existingProductCookies = $.cookie('WishList');
+            Productcartlist = existingProductCookies.split('-');
+            var productId = $(this).attr('data-id');
+            function arrayRemove(Productcartlist, productId) {
+
+                return Productcartlist.filter(function (ele) {
+                    return ele != productId;
+                });
+
+            }
+
+            Productcartlist = arrayRemove(Productcartlist, productId);
+
+            $.cookie('WishList', Productcartlist.join('-'), { path: '/' });
+             swal("Ok", "Your Product is removed From WishList", "warning");
+            window.location = '@Url.Action("WishList","Shop")';
+            removeWishList();
+        });
+
+    </script>
+}
+else
+{
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+
+    <br />
+    <br />
+    <br />
+    <link href="~/Content/styles/Flip.css" type="text/css" rel="stylesheet">
+    <div class="fliptop">
+        <div class="flipcart">
+            <span class="flipadd">My WishList (0)</span>
+        </div>
+        <div class="flipmiddle">
+            <img src="~/Content/images/WishList.jpg" class="flipimg">
+            <span class="flipadd">Your Wish-List is empty</span>
+            <a href="@Url.Action("Index","Shop")"><span class="flipWish">+ Add items from Product List</span></a>
+        </div>
+    </div>
+}

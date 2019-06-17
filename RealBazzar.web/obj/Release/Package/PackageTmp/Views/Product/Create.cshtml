@@ -1,0 +1,172 @@
+﻿@model IEnumerable<RealBazzar.Entities.Category>
+@{
+    ViewBag.Title = "Create";
+}
+
+<br />
+<br />
+&nbsp;&nbsp;&nbsp;
+
+<form id="frmcr" class="form-control">
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="form-group">
+                <label>Category</label>
+                <select name="CategoryId" class="form-control">
+                    @foreach (var item in Model)
+            {
+                <option value="@item.Id">@item.Name</option>
+    }
+                </select>
+
+            </div>
+            <div class="form-group">
+                <label>Name <span class="text-danger">*</span></label>
+                <input name="Name" class="form-control" placeholder="Name" />
+            </div>
+
+            <div class="form-group">
+                <label>Description</label>
+                <input name="Description" class="form-control" placeholder="Description" />
+            </div>
+            <div class="form-group">
+                <label>Price</label>
+                <input name="Price" class="form-control" placeholder="Price" />
+            </div>
+            <div class="form-group">
+                <label>CostPrice</label>
+                <input name="CostPrice" class="form-control" placeholder="Cost Price" />
+            </div>
+            <div class="form-group">
+                <label>Is Featured</label>
+                <br />
+                <div class="row">
+                    <div class="col-md-6">
+
+                        True
+                        <input name="IsFeatured" type="radio" value="True" />
+
+                    </div>
+                    <div class="col-md-6">
+                        False
+                        <input name="IsFeatured" type="radio" value="False" />
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label>Is BestSeller</label>
+                <br />
+                <div class="row">
+                    <div class="col-md-6">
+                        True<input name="BestSeller" type="radio" value="True" />
+                    </div>
+                    <div class="col-md-6">
+                        False<input name="BestSeller" type="radio" value="False" />
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="form-group">
+                <label>Deal Of The Day</label>
+                <br />
+                <div class="row">
+                    <div class="col-md-6">
+                        True<input name="dealofday" type="radio" value="True" />
+                    </div>
+                    <div class="col-md-6">
+                        False<input name="dealofday" type="radio" value="False" />
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="form-group">
+                <label>Image 1</label>
+                <input name="ImageURL" class="form-control" placeholder="Image 1" />
+            </div>
+            <div class="form-group">
+                <label>Image 2</label>
+                <input name="ImageURL2" class="form-control" placeholder="Image 2" />
+            </div>
+            <div class="form-group">
+                <label>Image 3</label>
+                <input name="ImageURL3" class="form-control" placeholder="Image 3" />
+            </div>
+            <button type="button" id="btnsave" class="btn btn-primary">
+                <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                Save
+            </button>
+        </div>
+    </div>
+
+</form>
+
+
+<script>
+    $("#frmcr").validate({
+        rules: {
+            Name: {
+                required: true,
+                minlength: 3,
+
+                maxlength: 50
+            },
+            Description: {
+                maxlength: 5000
+            },
+            Price:{
+                range: [1, 5000000]
+            }
+
+        },
+        messages: {
+            Name: {
+                required: 'Product Name is Required',
+                minlength: 'Minimun lenght of product Should be 3',
+                maxlength: 'Maximum lenght of product Should be 50'
+            },
+            Description: {
+                maxlength: 'Maximum lenght of product Should be 5000'
+            },
+            Price: {
+                range: 'price Should be between the Range'
+            }
+        }
+    });
+    $("#btnsave").click(function () {
+
+        if ($("#frmcr").valid()) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Create", "Product")',
+                data: $("#frmcr").serialize()
+
+            }).done(function (response) {
+                $("#tblres").html(response);
+                $("#atncon").html("");
+
+
+            }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                swal({
+                    title: "You Can't insert this product?",
+                    text: "Please Enter All required Feild!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+            });
+        }
+        else {
+            swal({
+                title: "Js?",
+                text: "Please Enter All required Feild!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+        }
+    });
+</script>

@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = "Contact";
+}
+<h2>@ViewBag.Title.</h2>
+<h3>@ViewBag.Message</h3>
+<br />
+<br />
+<br />
+<br />
+<br />
+<div class="new_arrivals">
+    <div class="container">
+        <div class="row">
+            <div class="col text-center">
+                <div class="section_title new_arrivals_title">
+                    <h3>Login</h3>
+                </div>
+            </div>
+        </div>
+        <br />
+        <br />
+        <br />
+        <div>
+            <address>
+                @ConfigServices.Instance.getConfigs("CompanyAddress").Value<br />
+
+                <abbr title="Phone">@ConfigServices.Instance.getConfigs("CompanyPhone").Value</abbr>
+
+            </address>
+
+            <address>
+                <strong>Support:</strong>   <a href="@ConfigServices.Instance.getConfigs("CompanyUrl").Value<">@ConfigServices.Instance.getConfigs("CompanyUrl").Value<</a><br />
+
+            </address>
+
+</div>
+</div>
+</div>

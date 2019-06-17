@@ -1,0 +1,166 @@
+﻿@using RealBazzar.web.EnumCode
+@model RealBazzar.web.ViewModel.ShopViewModel
+@{
+    ViewBag.Title = "Shop";
+
+}
+
+<div class="container product_section_container">
+    <div class="row">
+        <div class="col product_section clearfix">
+
+            <!-- Breadcrumbs -->
+
+            <div class="breadcrumbs d-flex flex-row align-items-center">
+
+            </div>
+
+            <!-- Sidebar -->
+
+            <div class="sidebar">
+                <div class="sidebar_section">
+                    <div class="sidebar_title">
+                        <h5> Sort By</h5>
+                    </div>
+                    <ul class="sidebar_categories">
+                        <li class="@(Model.SortBy.HasValue ? Model.SortBy.Value == (int)SortbyEnum.NewArrival ? "active" : string.Empty : string.Empty)">
+                            <a data-href="@Url.Action("Index", "Shop", new { sortBy = (int)SortbyEnum.NewArrival , CategoryId=Model.CategoryId })">New Arrival</a>
+                        </li>
+                        <li class="datalink @(Model.SortBy.HasValue ? Model.SortBy.Value == (int)SortbyEnum.BestSeller ? "active" : string.Empty : string.Empty)">
+                            <a href="@Url.Action("Index", "Shop", new { sortBy = (int)SortbyEnum.BestSeller, CategoryId=Model.CategoryId })">BestSeller</a>
+                        </li>
+
+                        <li class=" @(Model.SortBy.HasValue ? Model.SortBy.Value == (int)SortbyEnum.Popolarity ? "active" : string.Empty : string.Empty)">
+                            <a @*data-*@ href="@Url.Action("Index", "Shop", new { sortBy = (int)SortbyEnum.Popolarity,CategoryId=Model.CategoryId })">Popularity</a>
+                        </li>
+                        <li class=" @(Model.SortBy.HasValue ? Model.SortBy.Value == (int)SortbyEnum.Featured ? "active" : string.Empty : string.Empty)">
+                            <a href="@Url.Action("Index", "Shop", new { sortBy = (int)SortbyEnum.Featured ,CategoryId=Model.CategoryId})">Featured</a>
+                        </li>
+                        <li class=" @(Model.SortBy.HasValue ? Model.SortBy.Value == (int)SortbyEnum.PriceHighToLow ? "active" : string.Empty : string.Empty)">
+                            <a @*data*@ href="@Url.Action("Index", "Shop", new { sortBy = (int)SortbyEnum.PriceHighToLow,CategoryId=Model.CategoryId })">High To Low</a>
+                        </li>
+                        <li class="datalink @(Model.SortBy.HasValue ? Model.SortBy.Value == (int)SortbyEnum.PriceLowtoHigh ? "active" : string.Empty : string.Empty)">
+                            <a @*data-*@ href="@Url.Action("Index", "Shop", new { sortBy = (int)SortbyEnum.PriceLowtoHigh ,CategoryId=Model.CategoryId})">Low To High</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Price Range Filtering -->
+                <!-- category -->
+
+                <div class="sidebar_section">
+                    <div class="sidebar_title">
+                        <h5>Featured Category</h5>
+                    </div>
+                    <ul class="sidebar_categories">
+                        @foreach (var item in Model.featuredCategory)
+                        {
+                            <li class="@(Model.CategoryId.HasValue && Model.CategoryId.Value == item.Id ? "active":string.Empty)">
+                                <a @*data-*@href="@Url.Action("Index", "Shop", new { categoryId = item.Id ,sortBy = Model.SortBy})">@item.Name</a>
+                            </li>
+
+                        }
+
+                    </ul>
+                </div>
+                <div class="sidebar_section">
+                    <div class="sidebar_title">
+                        <h5>Filter by Price</h5>
+                    </div>
+                    <p>
+                        <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+                    </p>
+                    <div id="slider-range"></div>
+
+                </div>
+                <!-- Color -->
+                <a href="@Url.Action("Index","Shop")" class="btn btn-danger">Remove All Filter</a>
+
+            </div>
+
+            <!-- Main Content -->
+            <div class="main_content">
+
+                <!-- Products -->
+
+                @{
+                    var filterViewModel = new FilterViewModel();
+                    filterViewModel.products = Model.products;
+                    filterViewModel.pager = Model.pager;
+                    filterViewModel.CategoryId = Model.CategoryId;
+                    filterViewModel.SortBy = Model.SortBy;
+                    Html.RenderPartial("Filter", filterViewModel);
+
+                }
+            </div>
+
+
+
+
+        </div>
+    </div>
+</div>
+
+<script>
+    var Timeoff;
+    var PriceSlider = $("#slider-range").slider(
+        {
+            range: true,
+            min: 0,
+            max: @Model.MaxPice,
+            values: [0, @Model.MaxPice],
+            slide: function (event, ui) {
+
+                var minPrice = ui.values[0];
+                var MaxPrice = ui.values[1];
+
+                $("#amount").val("₹" + minPrice + ".00" + "-₹" + MaxPrice + ".00");
+                clearTimeout(Timeoff);
+                Timeoff = setTimeout(GetSliderdata, 500);
+
+
+            }
+        });
+
+
+    //function Getdata(durl) {
+
+    //    $.ajax({
+
+    //        url: durl,
+    //           data: {
+
+    //               minimumPrice: PriceSlider.slider("values", 0),
+    //               Maximumprice: PriceSlider.slider("values",1)
+    //           }
+
+    //            }).done(function (response) {
+    //                $(".product-grid").html(response);
+
+
+    //            }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+    //                alert("F");
+    //            });
+    //}
+
+    function GetSliderdata() {
+
+        $.ajax({
+
+               url: '@Url.Action("Filter", "Shop")',
+               data: {
+                   sortBy: '@Model.SortBy',
+                   CategoryId: '@Model.CategoryId',
+                   minimumPrice: PriceSlider.slider("values", 0),
+                   Maximumprice: PriceSlider.slider("values",1)
+               }
+
+                }).done(function (response) {
+                    $("#ProductDiv").html(response);
+
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("F");
+                });
+    }
+</script>

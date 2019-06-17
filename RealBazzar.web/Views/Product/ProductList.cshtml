@@ -1,0 +1,244 @@
+﻿@model RealBazzar.web.ViewModel.ProductSearchViewModel
+@{
+    ViewBag.Title = "ProductList";
+}
+
+
+<h3 class="box-title">Product</h3>
+
+<form method="post">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <input type="text" id="searchtxt" class="form-control" name="Search" placeholder="Search" value="@Model.SearchItem" />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <button type="button" id="serachbtn" class="btn btn-success">
+                <i class="fa fa-search" aria-hidden="true"></i>
+                Search
+            </button>
+            &nbsp;
+            <button type="button" class="btn btn-success" id="newbtn" style="width:100px"><i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;New</button>&nbsp;
+            <button type="button" class="btn btn-success" id="resetbtn" style="width:100px">
+                <i class="fa fa-minus" aria-hidden="true"></i>
+                &nbsp;Reset
+            </button>
+            <br /> &nbsp;
+
+        </div>
+
+    </div>
+</form>
+
+<div class="table-responsive">
+    <table class="table" id="ProductData">
+        <thead>
+            <tr>
+                <td>Product Name</td>
+                <td>Category</td>
+                <td>Price</td>
+                <td>Is Featured</td>
+                <td>Best Seller</td>
+                <td>Action</td>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Products != null && Model.Products.Count > 0)
+            {
+                foreach (var item in Model.Products)
+                {
+                    <tr>
+                        <td class="text-success">@item.Name</td>
+                        <td>
+                            @if (item.category.Name != null)
+                            {
+                                <text>@item.category.Name</text>
+                            }
+                            else
+                            {
+                                <text>-</text>
+                            }
+                        </td>
+                        <td>@item.Price</td>
+                        <td>@item.IsFeatured</td>
+                        <td>@item.BestSeller</td>
+                        <td>
+
+
+                            <button class="btnEdit btn btn-default" data-id="@item.Id" style="height:35px"><i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;Edit</button>
+                            <button class="btndelete btn btn-danger" data-id="@item.Id" style="height:35px">
+                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td class="text-danger"> No Prodoct  Found</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+    <div>
+        @if (Model.pager != null)
+
+        {
+            if (Model.pager.CurrenPage > 1)
+            {
+                <button class="pageBtn btn btn-default" data-pagevalue="1"><<</button>
+                <button class="pageBtn btn btn-default" data-pagevalue="@(Model.pager.CurrenPage - 1) "><</button>
+            }
+            for (var page = Model.pager.StartPage; page <= Model.pager.EndPage; page++)
+            {
+                string activeClass = Model.pager.CurrenPage == page ? "active bg-info" : string.Empty;
+                <button class="pageBtn @(activeClass) btn btn-danger" data-pagevalue="@page">@page</button>
+            }
+            if (Model.pager.CurrenPage < Model.pager.TotalPage)
+            {
+                <button class="pageBtn btn btn-default" data-pagevalue="@(Model.pager.CurrenPage + 1)">></button>
+                <button class="pageBtn btn btn-default" data-pagevalue="@Model.pager.EndPage">>></button>
+
+            }
+
+
+        }
+    </div>
+</div>
+
+
+<script>
+
+
+    $(".pageBtn").click(function () {
+
+                $.ajax({
+
+                    url: '@Url.Action("ProductList", "Product")',
+                    data: {
+                        pageNo: $(this).attr("data-pagevalue"),
+                        search: '@Model.SearchItem'
+                    }
+
+
+                }).done(function (response) {
+                    $("#tblres").html(response);
+
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("F");
+                });
+
+    });
+
+            $("#serachbtn").click(function () {
+                var searchValue = $("#searchtxt").val();
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("ProductList", "Product")',
+                    data: {
+                        Search: searchValue
+                    }
+
+                }).done(function (response) {
+                    $("#tblres").html(response);
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("F");
+                });
+
+    });
+
+            $("#resetbtn").click(function () {
+                var searchValue = "";
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("ProductList", "Product")',
+                    data: {
+                        Search: searchValue
+                    }
+
+                }).done(function (response) {
+                    $("#tblres").html(response);
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("F");
+                });
+
+            });
+            $("#newbtn").click(function () {
+
+                $.ajax({
+
+                    url: '@Url.Action("Create", "Product")'
+
+
+                }).done(function (response) {
+                    $("#atncon").html(response);
+                    focusAction("atncon");
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("F");
+                });
+
+            });
+            $(".btnEdit").click(function () {
+
+                $.ajax({
+
+                    url: '@Url.Action("Edit", "Product")',
+                    data: {
+                        Id: $(this).attr('data-id')
+                    }
+
+
+                }).done(function (response) {
+                    $("#atncon").html(response);
+                    focusAction("atncon");
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("F");
+                });
+
+            });
+
+            $(".btndelete").click(function () {
+                swal({
+                    title: "Confirm",
+                    text: "Are you Sure! that you want to delete this product",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        if (willDelete) {
+
+                            $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("Delete", "Product")',
+                        data: {
+                            Id: $(this).attr('data-id')
+                        }
+
+
+                    }).done(function (response) {
+                        $("#tblres").html(response);
+                        swal("Poof! Your Product has been deleted!", {
+                            icon: "success",
+                        });
+
+                    }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert("F");
+                    });
+
+                        }
+                    });
+
+            });
+
+
+</script>

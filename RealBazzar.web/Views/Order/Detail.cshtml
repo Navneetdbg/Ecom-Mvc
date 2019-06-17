@@ -1,0 +1,152 @@
+﻿
+
+@model RealBazzar.web.ViewModel.OrderDetailsViewModel
+@{
+    /**/
+
+    ViewBag.Title = "Order-Detail";
+}
+
+<br />
+<br />
+<h2>Details</h2>
+
+
+
+@if (Model != null && Model.Orders != null)
+{
+    var i = 1;
+
+
+    <div class="container product_section_container">
+        <div class="row">
+            <div class="col-md-4 order-md-2 mb-4">
+                <h4 class="d-flex justify-content-between align-items-center mb-3"></h4>
+                <ul class="list-group mb-3">
+                    @foreach (var item in Model.Orders.OrderItems)
+                    {
+
+
+                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                            <div>
+                                <h6 class="my-0">@i-@item.Product.Name &nbsp; &nbsp;Qty &nbsp;:&nbsp; <span class="badge badge-secondary badge-pill">@item.Quantity</span> </h6>
+                                <small class="text-muted">@(item.Product.Description.Length > 50 ? item.Product.Description.Substring(0, 40) : item.Product.Description)</small>
+                            </div>
+                            <span class="text-muted">₹ &nbsp;@(item.Product.Price) </span>
+                        </li>
+                        i++;
+                    }
+
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Total (INR)</span>
+                        <strong>₹ &nbsp; @Model.Orders.TotalAmount</strong>
+                    </li>
+                </ul>
+
+            </div>
+
+
+
+            <div class="col-md-8 order-md-1">
+                <h4 class="mb-3">Billing address</h4>
+                <form class="needs-validation" novalidate="" id="formData">
+
+                    <div class="mb-3">
+                        <label for="Name">Name<span class="text-muted"></span></label>
+                        <input type="text" class="form-control" id="Name" required value="@Model.Orders.Name">
+
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email">Email <span class="text-muted"></span></label>
+                        <input type="email" class="form-control" id="Email" value="@Model.Orders.Email" readonly>
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="Mobile No">Mobile No <span class="text-muted"></span></label>
+                        <input type="number" class="form-control" id="MobileNo" value="@Model.Orders.Mobile">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="address">Address</label>
+                        <input type="text" class="form-control" id="Address" required value="@Model.Orders.Address">
+
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="address2">Country <span class="text-muted"></span></label>
+                        <input type="text" class="form-control" id="Country" value="@Model.Orders.Country">
+                    </div>
+                    <div class="mb-3">
+                        <label for="PinCode">Pincode <span class="text-muted"></span></label>
+                        <input type="number" class="form-control" id="PinCode" required value="@Model.Orders.Pincode">
+                    </div>
+                    <div class="mb-3 ">
+                        <label for="Status">Order Status <span class="text-muted"></span></label>
+                        <select class="form-control" name="Status" id="changeStatus">
+
+                            @foreach (var item in Model.AvailableStatus)
+                            {
+                                var isSelected = item == Model.Orders.OrderStatus;
+                                <option class="dropdown-item" @(isSelected ? "Selected" : string.Empty)>@item</option>
+
+                            }
+                        </select>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $("#changeStatus").change(function () {
+             $.ajax({
+
+                    url: '@Url.Action("ChangeStatus", "Order")',
+                    data: {
+                        status: $("#changeStatus").val(),
+                        Id: '@Model.Orders.Id'
+                    }
+
+
+             }).done(function (response) {
+                 if (response.Success) {
+                     swal("Success", "Your Order Status is Updated", "success").then((value) => {
+
+                         window.location='@Url.Action("Index", "Order")';
+                     });
+                 }
+                 else {
+                     swal("Error", "Your Order Status is Not Updated", "warning");
+                 }
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    swal({
+                        title: "Failed",
+                        text: "Some Error Occured! We will Fix Them Soon ",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    });
+                });
+        });
+    </script>
+
+}
+
+
+else
+{
+    <link href="~/Content/styles/Flip.css" type="text/css" rel="stylesheet">
+    <div class="fliptop">
+        <div class="flipcart">
+            <span class="flipadd">Order Details No Avaailable</span>
+        </div>
+        <div class="flipmiddle">
+            <img src="~/Content/images/Empty.png" class="flipimg">
+            <span class="flipadd">Your Order Cart is empty</span>
+
+        </div>
+    </div>
+}

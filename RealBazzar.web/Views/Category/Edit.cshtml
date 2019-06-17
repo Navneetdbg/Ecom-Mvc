@@ -1,0 +1,113 @@
+﻿@model RealBazzar.Entities.Category
+@{
+    ViewBag.Title = "Edit";
+    var trueChecked = Model.IsFetured ? "checked" : string.Empty;
+    var falseChecked = !Model.IsFetured ? "checked" : string.Empty;
+    var truen = Model.IndexPage ? "checked" : string.Empty;
+    var falsen = !Model.IndexPage ? "checked" : string.Empty;
+
+}
+<br />
+<br />
+
+<h2>Edit</h2>
+
+<form method="post" id="frmcedit" class="form-control">
+    <div class="row">
+        <div class="col-md-8">
+            <input type="hidden" name="Id" value="@Model.Id" />
+            @*<input type="hidden" name="ImageUrl" value="@Model.ImageURL"/>*@
+            <div class="form-group">
+                <label>Name</label>
+                <input name="Name" value="@Model.Name" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <input name="Description" value="@Model.Description" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>ImageUrl</label>
+                <input name="ImageURL" value="@Model.ImageURL" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label>ImageUrl</label>
+                <input name="ImageURL" value="@Model.ImageURL2" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label>Is Featured</label><br />
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="radio" name="IsFetured" value="true" @trueChecked />True
+                    </div>
+                    <div class="col-md-6">
+                        <input type="radio" name="IsFetured" value="false" @falseChecked />False
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Is Featured</label><br />
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="radio" name="IndexPage" value="true" @truen />True
+                    </div>
+                    <div class="col-md-6">
+                        <input type="radio" name="IndexPage" value="false" @falsen />False
+                    </div>
+                </div>
+            </div>
+            <button type="button" id="btnupto" class="btn btn-default"> <i class="fa fa-wrench" aria-hidden="true"></i>Save</button>
+        </div>
+
+        <div class="col-md-4">
+            <img class="form-control image-fluid" name="ImageUrl" src="~/Content/images/@Model.ImageURL" />
+        </div>
+    </div>
+</form>
+
+<script>
+    $("#frmcedit").validate({
+        rules: {
+            Name: {
+                required: true,
+                minlength: 3,
+
+                maxlength: 50
+            },
+            Description: {
+                maxlength: 5000
+            }
+        },
+        messages: {
+            Name: {
+                required: 'Product Name is Required',
+                minlength: 'Minimun lenght of product Should be 3',
+                maxlength: 'Maximum lenght of product Should be 50'
+            },
+            Description: {
+                maxlength: 'Maximum lenght of product Should be 5000'
+            }
+        }
+    });
+    $("#btnupto").click(function () {
+
+       $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Edit","Category")',
+            data: $("#frmcedit").serialize()
+
+        }).done(function (response) {
+            $("#tblcat").html(response);
+            $("#newatncon").html("");
+            
+
+        }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+            alert("Fut");
+        });
+
+    });
+</script>
+
+

@@ -1,0 +1,71 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+<style>
+    #loadingImg {
+        display: none;
+    }
+</style>
+<div class="row">
+    <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+        <div class="white-box">
+            <div class="container">
+
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <input type="file" id="fileInput" multiple class="form-control" />
+                        </div>
+                        <div class="col-md-4">
+                            <input type="button" id="fileButton" value="Upload Files" class="btn btn-success" /><br />
+
+                        </div>
+
+                        <img src="~/Content/images/Loading.gif" id="loadingImg" />
+
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+            <script>
+    $(document).ready(function () {
+        $("#fileButton").click(function () {
+            var files = $("#fileInput").get(0).files;
+            var fileData = new FormData();
+
+            for (var i = 0; i < files.length; i++) {
+                fileData.append("fileInput", files[i]);
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("uploadImage","Image")",
+                dataType: "json",
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: fileData,
+                success: function (result, status, xhr) {
+                    alert(result);
+                },
+                error: function (xhr, status, error) {
+                    alert(status);
+                }
+            });
+        });
+
+        $(document).ajaxStart(function () {
+            $("#loadingImg").show();
+            $("#fileButton").prop('disabled', true);
+        });
+
+        $(document).ajaxStop(function () {
+            $("#loadingImg").hide();
+            $("#fileButton").prop('disabled', false);
+            $("#fileInput").val("");
+        });
+
+    });
+            </script>

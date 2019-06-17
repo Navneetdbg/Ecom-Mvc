@@ -1,0 +1,252 @@
+﻿@model RealBazzar.web.ViewModel.CheckoutViewModel
+@{
+    /**/
+
+    ViewBag.Title = "Checkout";
+    
+   
+
+}
+<br />
+<br />
+<br />
+<br />
+<br />
+
+<br />
+<br />
+<br />
+<style type='text/css'>
+    .example { 
+        
+        border-radius: 50%;
+        
+        border: 3px;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+    }
+</style>
+
+@if (Model != null && Model.CheckoutProduct != null && Model.CheckoutProduct.Count > 0)
+{
+    var i = 1;
+    <link href="~/Content/styles/form-validation.css" rel="stylesheet" />
+    <div style="margin-left:600px;margin-top:50px"><h3>CheckOut</h3></div>
+    <div class="container product_section_container">
+        <div class="row">
+            <div class="notice_div col-md-4 order-md-2 mb-4">
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-muted">Your cart</span>
+                    <span class="badge badge-secondary badge-pill">@Model.CheckoutProduct.Count</span>
+                </h4>
+                <ul class="list-group mb-3">
+                    @foreach (var item in Model.CheckoutProduct)
+                    {
+                        var Quantity = Model.CartproductIds.Where(x => x == item.Id).Count();
+
+                    <li class="list-group-item d-flex justify-content-between lh-condensed">
+                        <div>
+                            <h6 class="my-0">
+                                @i-@item.Name &nbsp; &nbsp;Qty &nbsp;&nbsp;&nbsp;&nbsp; <span class="newQuan badge badge-secondary badge-pill" id="quan">@Quantity</span>
+                            </h6>
+                            <br />
+                            <medium><button class="btnMinus example" data-id="@item.Id"> - </button>&nbsp;<span><button class="btnPlus example" data-id="@item.Id">+</button></span>&nbsp;<span><button class="btnCancel example" data-id="@item.Id"> <i class="fa fa-times" aria-hidden="true"></i></button></span> </medium><br />
+                            <small class="text-muted">@(item.Description.Length > 50 ? item.Description.Substring(0, 40) : item.Description)</small>
+                        </div>
+                        <br/>
+                        <span class="text-muted">₹ &nbsp;@(item.Price * Quantity)</span>
+
+
+                    </li>
+                        i++;
+
+
+                    }
+
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Total (INR)</span>
+                        <strong>₹ &nbsp; @Model.CheckoutProduct.Sum(y => y.Price * Model.CartproductIds.Where(x => x == y.Id).Count())</strong>
+                        <input id="newAmount" type="hidden" value="0"/>
+                    </li>
+                </ul>
+
+            </div>
+
+
+
+            <div class="col-md-8 order-md-1">
+                <h4 class="mb-3">Billing address</h4>
+                <form class="needs-validation" novalidate="" id="formData">
+
+                    <div class="mb-3">
+                        <label for="Name">Name<span class="text-muted"></span></label>
+                        <input type="text" class="form-control" id="Name" required>
+
+                    </div>
+                    <div class="invalid-feedback" style="width: 100%;">
+                        Your username is required.
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email">Email <span class="text-muted"></span></label>
+                        <input type="email" class="form-control" id="Email" value="@Model.Users.Email" readonly>
+
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Mobile No">Mobile No <span class="text-muted"></span></label>
+                        <input type="number" class="form-control" id="MobileNo">
+                    </div>
+                    <div class="invalid-feedback" style="width: 100%;">
+                        Your Mobile Number is required.
+                    </div>
+                    <div class="mb-3">
+                        <label for="address">Address</label>
+                        <textarea type="text" class="form-control" id="Address" required></textarea>
+
+                    </div>
+                    <div class="invalid-feedback" style="width: 100%;">
+                        Your Address is required.
+                    </div>
+                    <div class="mb-3">
+                        <label for="address2">Country <span class="text-muted"></span></label>
+                        <input type="text" class="form-control" id="Country">
+                    </div>
+                    <div class="invalid-feedback" style="width: 100%;">
+                        Your Country is required.
+                    </div>
+                    <div class="mb-3">
+                        <label for="PinCode">Pincode <span class="text-muted"></span></label>
+                        <input type="number" class="form-control" id="PinCode" required>
+                    </div>
+                    <div class="invalid-feedback" style="width: 100%;">
+                        Your PinCode is required.
+                    </div>
+
+                    <hr class="mb-4">
+
+                    <button id="orderbtn" class="btn btn-primary btn-lg btn-block" type="button">Place Order</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+    $("#orderbtn").click(function () {
+        
+        $.ajax({
+            url: '@Url.Action("PlaceOrder","Shop")',
+            data: {
+                Name: $("#Name").val(),
+                Mobile: $("#MobileNo").val(),
+                Address: $("#Address").val(),
+                Country: $("#Country").val(),
+                PinCode: $("#PinCode").val(),
+                Email: $("#Email").val(),
+                ProductIds: '@string.Join("-", Model.CartproductIds)'
+            }
+        })
+            .done(function (response) {
+                if (response.Success) {
+                    $.cookie('CartProduct', '', { path: '/' });
+                    updateCount();
+                    swal("Success", "Your Order is Placed", "success");
+                    window.location= '@Url.Action("Index", "Home")';
+                }
+                else {
+                    swal("Error", "Your Order is Not Placed", "warning");
+                }
+
+        }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+            swal({
+                title: "Failed",
+                text: "Some Error Occured! We will Fix Them Soon ",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            });
+        });
+        });
+
+
+
+        $(".btnCancel").click(function () {
+            var Productnewcartlist;
+            var existingProductCookies = $.cookie('CartProduct');
+            Productcartlist = existingProductCookies.split('-');
+            var productId = $(this).attr('data-id');
+            function arrayRemove(Productcartlist, productId) {
+
+                return Productcartlist.filter(function (ele) {
+                    return ele != productId;
+                });
+
+            }
+
+            Productcartlist = arrayRemove(Productcartlist, productId);
+
+
+            $.cookie('CartProduct', Productcartlist.join('-'), { path: '/' });
+            swal("Ok", "Your Product is removed From Cart", "warning");
+            window.location = '@Url.Action("Checkout","Shop")';
+
+        });
+
+
+        $(".btnMinus").click(function () {
+            var Productnewcartlist;
+            var existingProductCookies = $.cookie('CartProduct');
+            Productcartlist = existingProductCookies.split('-');
+            var productId = $(this).attr('data-id');
+            var index = Productcartlist.indexOf(productId)
+            if (index > -1) {
+                Productcartlist.splice(index, 1);
+            }
+            $.cookie('CartProduct', Productcartlist.join('-'), { path: '/' });
+            swal("Ok", "Your Product Quantity is Reduced", "warning");
+            window.location = '@Url.Action("Checkout","Shop")';
+        });
+
+        $(".btnPlus").click(function () {
+            var Productnewcartlist;
+            var existingProductCookies = $.cookie('CartProduct');
+
+               Productcartlist = existingProductCookies.split('-');
+
+            var productId = $(this).attr('data-id');
+
+            Productcartlist.push(productId);
+            $.cookie('CartProduct', Productcartlist.join('-'), { path: '/' });
+            swal("Ok", "Your Product Quantity is Added", "Success");
+            window.location = '@Url.Action("Checkout","Shop")';
+
+        });
+    </script>
+}
+
+
+else
+{
+    <link href="~/Content/styles/Flip.css" type="text/css" rel="stylesheet">
+    <div class="fliptop">
+    <div class="flipcart">
+        <span class="flipadd">My Cart (0)</span>
+        </div>
+    <div class="flipmiddle">
+        <img src="~/Content/images/Empty.png" class="flipimg">
+        <span class="flipadd">Your Shopping Cart is empty</span>
+        <a href="@Url.Action("Whislist","Shop")"><span class="flipWish">+ Add items from wishlist</span></a>
+        </div>
+    </div>
+}
+
+
+
+
+
+
+
+

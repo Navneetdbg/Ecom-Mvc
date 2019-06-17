@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "Product-Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+        <div class="white-box">
+          
+
+
+
+            <div id="tblres">
+            @{
+                Html.RenderAction("ProductList");
+                //Html.RenderAction("Create");
+            }
+            </div>
+                <div id="atncon" class="container contact_container">
+
+                </div>
+        </div>
+    </div>
+</div>
+
+<script>
+        function focusAction(controlToFocus) {
+            $('html, body').animate({
+                scrollTop: $("#" + controlToFocus).offset().top - 100
+            }, 1100);
+        }
+    </script>

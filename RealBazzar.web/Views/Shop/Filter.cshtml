@@ -1,0 +1,144 @@
+﻿@model RealBazzar.web.ViewModel.FilterViewModel
+
+@{
+                /**/
+
+}
+@if (Model != null)
+{
+    <div class="products_iso">
+        <div class="row">
+
+            <div class="col">
+
+                <div class="product-grid">
+                    <div id="ProductDiv">
+
+
+                        <!-- Product 1 -->
+                        @foreach (var item in Model.products)
+
+                        {
+
+
+                            <div class="product-item">
+                                <a href="@Url.Action("Details", "Product", new { Id = item.Id })">
+                                    <div class="product discount product_filter">
+                                        <div class="product_image">
+                                            <img src="~/Content/images/@item.ImageURL" alt="">
+                                        </div>
+                                        <div class="favorite favorite_left"></div>
+                                        <div class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center">
+                                            <h6 style="color:white;">@(item.CostPrice - item.Price)</h6>
+                                        </div>
+                                        <div class="product_info">
+                                            <h4 class="product_name">
+                                                @item.Name
+
+                                            </h4>
+                                            <div class="product_price">
+                                                ₹@item.Price
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+
+
+                                <div class="red_button add_to_cart_button" style="margin-left:0%">
+
+                                    <a class="butCart" data-id="@item.Id"> <i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;add to cart</a>
+                                </div>
+                            </div>
+
+
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="product_sorting_container product_sorting_container_bottom clearfix">
+        <span class="showing_results">Showing @(((Model.pager.CurrenPage - 1) * Model.pager.PageSize) + 1) – @(((Model.pager.CurrenPage - 1) * Model.pager.PageSize) + (Model.products.Count < Model.pager.PageSize ? Model.products.Count : Model.pager.PageSize) ) &nbsp; Of @Model.pager.TotalItems<span> &nbsp; Products</span></span>
+
+
+
+        @if (Model.pager != null && Model.pager.TotalPage > 1)
+
+        {
+
+            <div class="pages d-flex flex-row align-items-center">
+                @if (Model.pager.CurrenPage != 1)
+                {
+                    <div id="next_page_1" class="page_next" style="margin-right:35px">
+                        <a href="@Url.Action("Index", "Shop", new { pageNo = Model.pager.CurrenPage - 1, sortBy = Model.SortBy, CategoryId = Model.CategoryId })"><i class="fa fa-long-arrow-left" aria-hidden="true"></i></a>
+                    </div>
+                }
+                <div class="page_current">
+
+
+                    &nbsp;
+                    <span>@Model.pager.CurrenPage</span>
+
+                    <ul class="page_selection">
+
+                        @if (Model.pager.CurrenPage > 1)
+                        {
+
+                            <li>
+                                <a href="@Url.Action("Index", "Shop", new { pageNo = 1, sortBy = Model.SortBy, CategoryId = Model.CategoryId })">1</a>
+                            </li>
+
+                        }
+                        @for (var page = Model.pager.StartPage; page <= Model.pager.EndPage; page++)
+                        {
+
+                            <li>
+                                <a href="@Url.Action("Index", "Shop", new { pageNo = page, sortBy = Model.SortBy, CategoryId = Model.CategoryId })">@page</a>
+                            </li>
+                        }
+                    </ul>
+
+                </div>
+                <div class="page_total">
+                    <span>of</span> @Model.pager.TotalPage
+
+                </div>
+                @if (Model.pager.CurrenPage < Model.pager.TotalPage)
+                {
+
+                    <div id="next_page_1" class="page_next">
+                        <a href="@Url.Action("Index", "Shop", new { pageNo = Model.pager.CurrenPage + 1, sortBy = Model.SortBy, CategoryId = Model.CategoryId })"><i class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
+                    </div>
+
+
+                }
+                @if (Model.pager.CurrenPage < Model.pager.EndPage)
+                {
+                    <div id="next_page_1" class="page_next" style="margin-left:35px">
+                        <a href="@Url.Action("Index", "Shop", new { pageNo = Model.pager.EndPage, sortBy = Model.SortBy, CategoryId = Model.CategoryId })"><i class="fa fa-long-arrow-Right" aria-hidden="false"></i></a>
+                    </div>
+                }
+            </div>
+
+        }
+    </div>
+
+}
+
+else
+{
+    <link href="~/Content/styles/Flip.css" type="text/css" rel="stylesheet">
+    <div class="fliptop">
+        <div class="flipcart">
+            <span class="flipadd">My Cart (0)</span>
+        </div>
+        <div class="flipmiddle">
+            <img src="~/Content/images/Empty.png" class="flipimg">
+            <span class="flipadd">Your Shopping Cart is empty</span>
+            <a href="@Url.Action("Whislist","Shop")"><span class="flipWish">+ Add items from wishlist</span></a>
+        </div>
+    </div>
+}
+

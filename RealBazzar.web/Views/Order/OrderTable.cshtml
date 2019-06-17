@@ -1,0 +1,186 @@
+﻿
+@model RealBazzar.web.ViewModel.OrderViewModel
+@{
+    ViewBag.Title = "Product-Index";
+}
+
+<h3 class="box-title">Orders</h3>
+            <form method="post">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <input type="text" id="searchtxt" class="form-control" name="Search" placeholder="Search" value="@Model.UserId" />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="button" id="serachbtn" class="btn btn-success">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                            Search
+                        </button>
+                        <button type="button" class="btn btn-success" id="resetbtn" style="width:100px">
+                            <i class="fa fa-minus" aria-hidden="true"></i>
+                            &nbsp;Reset
+                        </button>
+
+                    </div>
+
+                </div>
+            </form>
+            <br />
+        </div>
+        <div>
+            <table class="table table-responsive form-group" id="ProductData">
+                <thead>
+                    <tr>
+                        <td>User Id</td>
+                        <td>Name</td>
+                        <td>Mobile</td>
+                        <td>TotalAmount</td>
+                        <td>OrderStatus</td>
+                        <td>Pincode</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Orders != null && Model.Orders.Count > 0)
+                    {
+                        foreach (var item in Model.Orders)
+                        {
+                            <tr>
+                                <td class="text-warning">@item.Email</td>
+                                <td class="text-success">@item.Name</td>
+                                <td>
+                                    @item.Mobile
+                                </td>
+                                <td>@item.Address</td>
+                                <td>@item.TotalAmount</td>
+                                <td>@item.OrderStatus</td>
+                                <td>@item.Pincode</td>
+                                <td>
+
+
+                                    <button class="btnEdit btn btn-default" data-id="@item.Id" style="height:35px"><i class="fa fa-info" aria-hidden="true"></i>&nbsp;Detail</button>
+                                    
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td class="text-danger" style="font-size:20px"> No Order  Found</td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+            <div>
+                @if (Model.Pager != null)
+
+                {
+                    if (Model.Pager.CurrenPage > 1)
+                    {
+                        <button class="pageBtn btn btn-default" data-pagevalue="1"><<</button>
+                        <button class="pageBtn btn btn-default" data-pagevalue="@(Model.Pager.CurrenPage - 1) "><</button>
+                    }
+                    for (var page = Model.Pager.StartPage; page <= Model.Pager.EndPage; page++)
+                    {
+                        string activeClass = Model.Pager.CurrenPage == page ? "active bg-info" : string.Empty;
+                        <button class="pageBtn @(activeClass) btn btn-danger" data-pagevalue="@page">@page</button>
+                    }
+                    if (Model.Pager.CurrenPage < Model.Pager.TotalPage)
+                    {
+                        <button class="pageBtn btn btn-default" data-pagevalue="@(Model.Pager.CurrenPage + 1)">></button>
+                        <button class="pageBtn btn btn-default" data-pagevalue="@Model.Pager.EndPage">>></button>
+
+                    }
+
+
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+    $(".pageBtn").click(function () {
+
+                $.ajax({
+
+                    url: '@Url.Action("OrderTable", "Order")',
+                    data: {
+                        pageNo: $(this).attr("data-pagevalue"),
+                        search: '@Model.UserId , @Model.Email,@Model.Status,@Model.Email,@Model.MobileNo'
+                    }
+
+
+                }).done(function (response) {
+                    $("#tblorder").html(response);
+
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("F");
+                });
+
+    });
+
+            $("#serachbtn").click(function () {
+                var searchValue = $("#searchtxt").val();
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("OrderTable", "Order")',
+                    data: {
+                        Search: searchValue
+                    }
+
+                }).done(function (response) {
+                    $("#tblorder").html(response);
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("F");
+                });
+
+    });
+
+            $("#resetbtn").click(function () {
+                var searchValue = "";
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("OrderTable", "Order")',
+                    data: {
+                        Search: searchValue
+                    }
+
+                }).done(function (response) {
+                    $("#tblorder").html(response);
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("F");
+                });
+
+            });
+          
+            $(".btnEdit").click(function () {
+
+                $.ajax({
+
+                    url: '@Url.Action("Detail", "Order")',
+                    data: {
+                        Id: $(this).attr('data-id')
+                    }
+
+
+                }).done(function (response) {
+                    $("#actOrder").html(response);
+                    focusAction("actOrder");
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("F");
+                });
+
+            });
+
+         
+
+</script>

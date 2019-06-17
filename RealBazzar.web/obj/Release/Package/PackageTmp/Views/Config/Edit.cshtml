@@ -1,0 +1,51 @@
+﻿@model RealBazzar.web.ViewModel.ConfigById
+@{
+    ViewBag.Title = "Edit";
+}
+
+<br />
+<br />
+<h4>Edit Configration</h4>
+<br/>
+<form method="post" id="frmcedit" class="form-control">
+    <div class="row">
+        <div class="col-md-12">
+
+            <input type="hidden" name="ImageUrl" value="@Model.ConfigbyId.Key" />
+            <div class="form-group">
+                <label>Key</label>
+                <input name="Key" value="@Model.ConfigbyId.Key" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label>Value</label>
+                <input name="Value" value="@Model.ConfigbyId.Value" class="form-control" />
+            </div>
+
+            <button type="button" id="btnupto" class="btn btn-default"> <i class="fa fa-wrench" aria-hidden="true"></i>&nbsp;Save</button>
+        </div>
+
+
+    </div>
+</form>
+
+<script>
+    $("#btnupto").click(function () {
+
+       $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Edit","Config")',
+            data: $("#frmcedit").serialize()
+
+        }).done(function (response) {
+            $("#tblcontainer").html(response);
+            $("#ActionContainer").html("");
+
+
+        }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+            alert("You Cant Edit 'KEY' ");
+        });
+
+    });
+</script>
+

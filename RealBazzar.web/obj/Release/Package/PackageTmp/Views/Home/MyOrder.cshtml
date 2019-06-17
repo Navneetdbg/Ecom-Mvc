@@ -1,0 +1,160 @@
+﻿@model RealBazzar.web.ViewModel.UserOrderItems
+@{
+    ViewBag.Title = "MyOrder";
+}
+@if (Model != null && Model.Orders.Count > 0)
+{
+    <link href="~/Content/styles/FlipOrders.css" rel="stylesheet" />
+    <div class="new_arrivals" id="form1">
+        <div class="container">
+            <div class="row">
+                <div class="col text-center">
+                    <div class="section_title new_arrivals_title">
+                        <h3>Order Status</h3>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <br />
+            <br />
+            <div>
+
+
+                <div>
+                    <table class="table table-hover form-group" id="ProductData">
+                        <thead>
+                            <tr>
+                                <td>Id</td>
+                                <td>Email</td>
+                                <td>Address</td>
+                                <td>Mobile</td>
+                                <td>Order Status</td>
+                                <td>Time</td>
+                                <td>Action</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Orders != null && Model.Orders.Count > 0)
+                            {
+                                foreach (var item in Model.Orders)
+                                {
+                                    <tr>
+                                        <td class="text-success">@item.Id</td>
+                                        <td>
+                                            @item.Email
+                                        </td>
+                                        <td>@item.Address</td>
+                                        <td>@item.Mobile</td>
+                                        <td>@item.OrderStatus</td>
+                                        <td>@item.OrderTime</td>
+                                        <td>
+
+                                            <a class="btndelete btn btn-success" href="@Url.Action("OrderDetails", "Home", new { Id = item.Id })" style="height:35px">
+                                                <i class="fa fa-info" aria-hidden="true"></i>
+                                                Detail
+                                            </a>
+                                            <button class="btnnewdelete btn btn-danger" data-id="@item.Id" type="button" style="height:35px">
+                                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                                Cancel
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td class="text-danger"> No Order  Found</td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                    <div>
+                        @if (Model.Pager != null)
+
+                        {
+                            if (Model.Pager.CurrenPage > 1)
+                            {
+                                <button class="pageBtn btn btn-default" data-pagevalue="1"><<</button>
+                                <button class="pageBtn btn btn-default" data-pagevalue="@(Model.Pager.CurrenPage - 1) "><</button>
+                            }
+                            for (var page = Model.Pager.StartPage; page <= Model.Pager.EndPage; page++)
+                            {
+                                string activeClass = Model.Pager.CurrenPage == page ? "active bg-info" : string.Empty;
+                                <button class="pageBtn @(activeClass) btn btn-danger" data-pagevalue="@page">@page</button>
+                            }
+                            if (Model.Pager.CurrenPage < Model.Pager.TotalPage)
+                            {
+                                <button class="pageBtn btn btn-default" data-pagevalue="@(Model.Pager.CurrenPage + 1)">></button>
+                                <button class="pageBtn btn btn-default" data-pagevalue="@Model.Pager.EndPage">>></button>
+
+                            }
+
+
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(".btnnewdelete").click(function () {
+            console.log("Clicked");
+             $.ajax({
+
+                    url: '@Url.Action("Cancel", "Home")',
+                    data: {
+
+                        Id: $(this).attr("data-id")
+                    }
+
+
+             }).done(function (response) {
+                 if (response.Success) {
+                     swal("Success", "Your have Successfully Cancelled Your Order", "success").then((value) => {
+
+                         window.location='@Url.Action("MyOrder", "Home")';
+                     });
+                 }
+                 else {
+                     swal("Error", "Your Can't Cancel this Order", "warning");
+                 }
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    swal({
+                        title: "Failed",
+                        text: "Some Error Occured! We will Fix Them Soon ",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    });
+                });
+        });
+    </script>
+}
+
+else
+{
+    <link href="~/Content/styles/Flip.css" type="text/css" rel="stylesheet">
+    <div class="fliptop">
+        <div class="flipcart">
+            <span class="flipadd">My Order (0)</span>
+        </div>
+        <div class="flipmiddle">
+            <img src="~/Content/images/Empty.png" class="flipimg">
+            <span class="flipadd">Your Order is empty</span>
+            <a href="@Url.Action("Index","Shop")"><span class="flipWish">Please Order</span></a>
+        </div>
+    </div>
+}
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,195 @@
+﻿@model RealBazzar.web.ViewModel.ConfigViewModel
+@{
+    ViewBag.Title = "_ConfigTable";
+}
+
+<h3 class="box-title">Configration</h3>
+            <form method="post">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <input type="text" id="searchtxt" class="form-control" name="Search" placeholder="Search" value="@Model.search" />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="button" id="serachbtn" class="btn btn-success">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                            Search
+                        </button>
+                        &nbsp;
+                        <button type="button" class="btn btn-success" id="tonewbtn" style="width:100px"><i class="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;New</button>&nbsp;
+                        <button type="button" class="btn btn-success" id="resetbtn" style="width:100px">
+                            <i class="fa fa-minus" aria-hidden="true"></i>
+                            &nbsp;Reset
+                        </button>
+                        <br /> &nbsp;
+
+                    </div>
+
+                </div>
+            </form>
+            <br />
+        </div>
+        <div>
+            <table class="table table-hover form-group" id="ProductData">
+                <thead>
+                    <tr>
+                        <td>Key</td>
+                        <td>Value</td>
+                        <td>Action</td>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.configr != null && Model.configr.Count > 0)
+                    {
+                        foreach (var item in Model.configr)
+                        {
+                            <tr>
+                                <td class="text-success">@item.Key</td>
+
+                                <td>@item.Value</td>
+
+                                <td>
+
+                                    <button class="btnEdit btn btn-default" data-key="@item.Key" style="height:35px"><i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;Edit</button>
+
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td class="text-danger"> No Config  Found</td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+            <div>
+                    @if (Model.pager != null)
+
+                    {
+                        if (Model.pager.CurrenPage > 1)
+                        {
+                            <button class="pageBtn btn btn-default" data-pagevalue="1"><<</button>
+                            <button class="pageBtn btn btn-default" data-pagevalue="@(Model.pager.CurrenPage - 1) "><</button>
+                        }
+                        for (var page = Model.pager.StartPage; page <= Model.pager.EndPage; page++)
+                        {
+                            string activeClass = Model.pager.CurrenPage == page ? "active bg-info" : string.Empty;
+                            <button class="pageBtn @(activeClass) btn btn-danger" data-pagevalue="@page">@page</button>
+                        }
+                        if (Model.pager.CurrenPage < Model.pager.TotalPage)
+                        {
+                            <button class="pageBtn btn btn-default" data-pagevalue="@(Model.pager.CurrenPage + 1)">></button>
+                            <button class="pageBtn btn btn-default" data-pagevalue="@Model.pager.EndPage">>></button>
+
+                        }
+
+
+                    }
+                </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+        $(".pageBtn").click(function () {
+
+                $.ajax({
+
+                    url: '@Url.Action("ConfigTable", "Config")',
+                    data: {
+                        pageNo: $(this).attr("data-pagevalue")
+                    }
+
+
+                }).done(function (response) {
+                    $("#tblcontainer").html(response);
+
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("F");
+                });
+
+    });
+    $("#serachbtn").click(function () {
+                var searchValue = $("#searchtxt").val();
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("ConfigTable", "Config")',
+                    data: {
+                        Search: searchValue
+                    }
+
+                }).done(function (response) {
+                    $("#tblcontainer").html(response);
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("F");
+                });
+
+    });
+
+            $("#resetbtn").click(function () {
+                var searchValue = "";
+                $.ajax({
+                    type: 'GET',
+                    url: '@Url.Action("ConfigTable", "Config")',
+                    data: {
+                        Search: searchValue
+                    }
+
+                }).done(function (response) {
+                    $("#tblcontainer").html(response);
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("F");
+                });
+
+            });
+
+
+     $("#tonewbtn").click(function () {
+
+                $.ajax({
+
+                    url: '@Url.Action("Create","Config")'
+
+
+                }).done(function (response) {
+                    $("#ActionContainer").html(response);
+                    focusAction("ActionContainer");
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("F");
+                });
+
+    });
+
+    $(".btnEdit").click(function () {
+
+                $.ajax({
+
+                    url: '@Url.Action("Edit", "Config")',
+                    data: {
+                        Key: $(this).attr('data-key')
+
+                    }
+
+
+
+                }).done(function (response) {
+                    $("#ActionContainer").html(response);
+                    focusAction("ActionContainer");
+
+                }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("F");
+                });
+
+            });
+</script>

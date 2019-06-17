@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+<form method="post" class="form-control" id="frmcat">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Key</label>
+                <input name="Key" class="form-control" />
+
+            </div>
+            <div class="form-group">
+                <label>Value</label>
+                <input name="Value" class="form-control" />
+            </div>
+           
+        </div>
+        <button type="button" id="btnnewsave" class="btn btn-success"><i class="fa fa-floppy-o" aria-hidden="true"></i>&nbsp;Save</button>
+    </div>
+</form>
+<script>
+     $("#btnnewsave").click(function () {
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Create","Config")',
+            data: $("#frmcat").serialize()
+
+        }).done(function (response) {
+            $("#tblcat").html(response);
+            $("#newatncon").html("");
+
+
+        }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+            alert("F");
+        });
+
+    });
+</script>
+

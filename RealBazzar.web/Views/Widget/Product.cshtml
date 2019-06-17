@@ -1,0 +1,106 @@
+﻿@model RealBazzar.web.ViewModel.ProductWidgetListViewModel
+
+
+@if (Model != null && Model.Products != null)
+{
+    if (!Model.IsFeaturedProduct)
+    {
+        <div class="row align-items-center">
+            <div class="col text-center">
+                <div class="new_arrivals_sorting">
+
+                    <ul class="arrivals_grid_sorting clearfix button-group filters-button-group">
+                        <li class="grid_sorting_button button d-flex flex-column justify-content-center align-items-center active is-checked" data-filter="*">all</li>
+                        @foreach (var cat in Model.Products.Select(x => x.category).Where(x => x.IsFetured).Distinct())
+                        {
+                            <li class="grid_sorting_button button d-flex flex-column justify-content-center align-items-center" data-filter=".@cat.Name">
+                                @cat.Name
+                            </li>
+                        }
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="product-grid" data-isotope='{ "itemSelector": ".product-item", "layoutMode": "fitRows" }'>
+
+                    @foreach (var item in Model.Products)
+                    {
+                        <a href="@Url.Action("Details","Product",new {Id= item.Id })">
+                            <div class="product-item @item.category.Name" style="width:220px">
+                                <div class="product discount product_filter">
+                                    <div class="product_image">
+                                        <img src="~/Content/images/@item.ImageURL" alt="">
+                                    </div>
+                                    <div class="favorite favorite_left"></div>
+                                    <div class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center">
+                                        <span>@(item.CostPrice - item.Price)</span>
+                                   </div>
+                                    <div class="product_info">
+                                        <h6 class="product_name">
+                                            <a href="@Url.Action("Details","Product",new { Id= item.Id})">@item.Name</a>
+                                        </h6>
+                                        <div class="product_price">
+                                            @item.Price
+                                            <span>@item.CostPrice</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="red_button add_to_cart_button" style="margin-left:0%">
+                                    <a href="#" class="butCart" data-id="@item.Id">add to cart</a>
+                                </div>
+                            </div>
+                        </a>
+
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
+    else
+    {
+
+        foreach (var item in Model.Products)
+        {
+        <div class="owl-item product_slider_item">
+            <a href="@Url.Action("Details","Product",new { Id= item.Id})">
+                <div class="product-item">
+
+                    <div class="product discount">
+                        <div class="product_image">
+                            <img src="~/Content/images/@item.ImageURL" alt="">
+                        </div>
+                        <div class="favorite favorite_left"></div>
+                        <div class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center">
+
+                            <span>New</span>
+
+                        </div>
+                        <div class="product_info">
+                            <h6 class="product_name">
+                                @item.Name
+                            </h6>
+                            <div class="product_price">
+                                @item.Price
+                                <span></span>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        }
+    }
+
+
+
+
+
+
+}

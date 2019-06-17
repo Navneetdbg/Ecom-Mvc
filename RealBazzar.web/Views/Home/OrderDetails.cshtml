@@ -1,0 +1,123 @@
+﻿@model RealBazzar.web.ViewModel.UserToItems
+@{
+    ViewBag.Title = "Order-Details";
+}
+
+<div class="new_arrivals">
+    <div class="container">
+        <div class="row">
+            <div class="col text-center">
+                <div class="section_title new_arrivals_title">
+                    <h3>Login</h3>
+                </div>
+            </div>
+        </div>
+        <br />
+        <br />
+        <br />
+        <div>
+            @if (Model != null && Model.Order != null)
+            {
+                var i = 1;
+                <div class="container product_section_container">
+                    <div class="row">
+                        <div class="col-md-12 order-md-2 mb-4">
+                            <h3>Order-Id : <span> &nbsp; @Model.Order.Id</span></h3>
+                            <h4 class="d-flex justify-content-between align-items-center mb-3"></h4>
+                            <ul class="list-group mb-3">
+                                @foreach (var item in Model.Order.OrderItems)
+                                {
+
+
+                                    <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                        <div>
+                                            <h6 class="my-0">
+                                                @i-@item.Product.Name &nbsp; &nbsp;Qty &nbsp;:&nbsp;
+                                                <span class="badge badge-secondary badge-pill">@item.Quantity</span>
+                                            </h6>
+                                            <small class="text-muted">@(item.Product.Description.Length > 50 ? item.Product.Description.Substring(0, 40) : item.Product.Description)</small>
+                                        </div>
+                                        <span class="text-muted">₹ &nbsp;@(item.Product.Price) </span>
+                                    </li>
+                                    i++;
+                                }
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span>Order Status</span>
+                                    <strong> @Model.Order.OrderStatus</strong>
+                                </li>
+
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span>Total (INR)</span>
+                                    <strong>₹ &nbsp; @Model.Order.TotalAmount</strong>
+                                </li>
+                            </ul>
+
+                        </div>
+
+                        <div class="col-md-12 order-md-2 mb-4">
+                            <h4 class="mb-3">Billing address</h4>
+                            <form class="needs-validation" novalidate="" id="MyFormData">
+                                <input type="hidden" value="@Model.Order.Id" />
+                                <div class="mb-3">
+                                    <label for="Name">Name<span class="text-muted"></span></label>
+                                    <label  class="form-control" id="Name">@Model.Order.Name</label>
+
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="email">Email <span class="text-muted"></span></label>
+                                    <label  class="form-control" id="Email">@Model.Order.Email</label>
+
+                                </div>
+                                <div class="mb-3">
+                                    <label for="Mobile No">Mobile No <span class="text-muted"></span></label>
+                                    <input type="number" name="Mobile" class="form-control" id="Mobile" value="@Model.Order.Mobile" />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="address">Address</label>
+                                    <input type="text" name="Address" class="form-control" id="Address" value="@Model.Order.Address" >
+                                   </div>
+
+                                <div class="mb-3">
+                                    <label for="address2">Country <span class="text-muted"></span></label>
+                                    <input type="text" name="Country" class="form-control" id="Country" value="@Model.Order.Country" />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="PinCode">Pincode <span class="text-muted"></span></label>
+                                    <input type="number" name="Pincode" class="form-control" id="Pincode" value="@Model.Order.Pincode">
+                                </div>
+
+                                <hr class="mb-4">
+                                <button id="orderbtn" class="btn btn-primary btn-lg btn-block" type="Submit">Update Address</button>
+                            </form>
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <script>
+                    
+                </script>
+
+
+            }
+
+            else
+            {
+                <link href="~/Content/styles/Flip.css" type="text/css" rel="stylesheet">
+                <div class="fliptop">
+                    <div class="flipcart">
+                        <span class="flipadd">Your Order (0)</span>
+                    </div>
+                    <div class="flipmiddle" style="margin-left:-30%">
+                        <img src="~/Content/images/no_order_found.png" class="flipimg">
+                        <span class="flipadd">Your Order is empty</span>
+                        <a href="@Url.Action("Whislist","Shop")"><span class="flipWish">+ Add items from wishlist</span></a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

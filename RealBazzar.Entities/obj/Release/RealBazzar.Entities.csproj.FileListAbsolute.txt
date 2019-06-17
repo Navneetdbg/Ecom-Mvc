@@ -1,0 +1,11 @@
+C:\Users\navne\source\repos\RealBazzar\RealBazzar.Entities\bin\Release\RealBazzar.Entities.dll
+C:\Users\navne\source\repos\RealBazzar\RealBazzar.Entities\bin\Release\RealBazzar.Entities.pdb
+C:\Users\navne\source\repos\RealBazzar\RealBazzar.Entities\obj\Release\RealBazzar.Entities.csproj.CoreCompileInputs.cache
+C:\Users\navne\source\repos\RealBazzar\RealBazzar.Entities\obj\Release\RealBazzar.Entities.dll
+C:\Users\navne\source\repos\RealBazzar\RealBazzar.Entities\obj\Release\RealBazzar.Entities.pdb
+E:\RealBazzar\RealBazzar.Entities\bin\Release\RealBazzar.Entities.dll
+E:\RealBazzar\RealBazzar.Entities\bin\Release\RealBazzar.Entities.pdb
+E:\RealBazzar\RealBazzar.Entities\obj\Release\RealBazzar.Entities.csproj.CoreCompileInputs.cache
+E:\RealBazzar\RealBazzar.Entities\obj\Release\RealBazzar.Entities.dll
+E:\RealBazzar\RealBazzar.Entities\obj\Release\RealBazzar.Entities.pdb
+E:\RealBazzar\RealBazzar.Entities\obj\Release\RealBazzar.Entities.csprojAssemblyReference.cache

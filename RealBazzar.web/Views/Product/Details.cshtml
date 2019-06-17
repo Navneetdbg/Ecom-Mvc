@@ -1,0 +1,273 @@
+﻿@model RealBazzar.web.ViewModel.DetailsProductViewModel
+@{
+    /**/
+
+    ViewBag.Title = "Details";
+    var i = 1;
+}
+@if (Model.Products != null)
+{
+    <div class="container single_product_container">
+        <div class="row">
+            <div class="col">
+
+                <!-- Breadcrumbs -->
+
+                <div class="breadcrumbs d-flex flex-row align-items-center">
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>Men's</a></li>
+                        <li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>Single Product</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-7">
+                <div class="single_product_pics">
+                    <div class="row">
+                        <div class="col-lg-3 thumbnails_col order-lg-1 order-2">
+                            <div class="single_product_thumbnails">
+                                <ul>
+                                    <li><img src="~/Content/images/@Model.Products.ImageURL" alt="" data-image="@Model.Products.ImageURL"></li>
+                                    <li class="active"><img src="~/Content/images/@Model.Products.ImageURL2" alt="" data-image="@Model.Products.ImageURL2"></li>
+                                    <li><img src="~/Content/images/@Model.Products.ImageURL3" alt="" data-image="@Model.Products.ImageURL3"></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-9 image_col order-lg-2 order-1">
+                            <div class="single_product_image">
+                                <div class="single_product_image_background" style="background-image:url(/Content/images/@Model.Products.ImageURL)"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="product_details">
+                    <div class="product_details_title">
+                        <h2>@Model.Products.Name</h2>
+                        <p>@Model.Products.Description</p>
+                    </div>
+                    <div class="free_delivery d-flex flex-row align-items-center justify-content-center">
+                        <span class="ti-truck"></span><span>free delivery</span>
+                    </div>
+                    <div class="original_price">₹@Model.Products.CostPrice</div>
+                    <div class="product_price">₹@Model.Products.Price</div>
+                    <ul class="star_rating">
+                        <li><i class="fa fa-star" aria-hidden="true"></i></li>
+                        <li><i class="fa fa-star" aria-hidden="true"></i></li>
+                        <li><i class="fa fa-star" aria-hidden="true"></i></li>
+                        <li><i class="fa fa-star" aria-hidden="true"></i></li>
+                        <li><i class="fa fa-star-o" aria-hidden="true"></i></li>
+                    </ul>
+
+                    <div class="quantity d-flex flex-column flex-sm-row align-items-sm-center">
+
+
+                        <div class="btn btn-default" style="background-color:#fe4c50;margin-left:20px;"><a href="#" class="butCart" data-id="@Model.Products.Id" style="color:whitesmoke"><i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;Add to cart</a></div>
+                        <div class="product_favorite d-flex flex-column align-items-center justify-content-center" data-id="@Model.Products.Id"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Tabs -->
+
+    <div class="tabs_section_container">
+
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="tabs_container">
+                        <ul class="tabs d-flex flex-sm-row flex-column align-items-left align-items-md-center justify-content-center">
+                            <li class="tab" data-active-tab="tab_1"><span>Reviews</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+
+                    <div id="tab_1" class="tab_container">
+                        <div class="row">
+
+                            @{Html.RenderAction("Review", "Product", new { ProductId = Model.Products.Id });}
+                            <!-- Add Review -->
+
+                            <div class="col-lg-6 add_review_col">
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <div class="add_review">
+                                        <form id="review_form" action="post">
+                                            <input type="hidden" name="ProductId" value="@Model.Products.Id" />
+                                            <div>
+                                                <h1>Add Review</h1>
+                                                <input id="Email" class="form_input input_name" type="text" name="Email" value="@User.Identity.Name" required="required" data-error="Name is required.">
+
+                                            </div>
+                                            <div>
+                                                <input type="hidden" name="Rate" value="5"/>
+                                                @*<h1>Your Rating:</h1>
+                                                    <ul class="user_star_rating" name="Rate">
+                                                        <li><i class="fa fa-star" aria-hidden="true"><input type="hidden" value="1"/></i></li>
+                                                        <li><i class="fa fa-star" aria-hidden="true"><input type="hidden" value="1" /></i></li>
+                                                        <li><i class="fa fa-star" aria-hidden="true"><input type="hidden" value="1" /></i></li>
+                                                        <li><i class="fa fa-star" aria-hidden="true"><input type="hidden" value="1" /></i></li>
+                                                        <li><i class="fa fa-star-o" aria-hidden="true"><input type="hidden" value="1" /></i></li>
+
+                                                    </ul>*@
+                                                <textarea id="Review" class="input_review" name="Review" placeholder="Your Review" rows="4" required data-error="Please, leave us a review."></textarea>
+                                            </div>
+                                            <div class="text-left text-sm-right">
+                                                <button id="review_submit" type="submit" class="red_button review_submit_btn trans_300" value="Submit">submit</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="add_review">
+                                        <h3>Login To Review</h3>
+                                        <a href="@Url.Action("Login","Account")" class="btn btn-Success">Login</a>
+                                        </div>
+
+                                }
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Benefit -->
+
+            <div class="benefit">
+                <div class="container">
+                    <div class="row benefit_row">
+                        <div class="col-lg-3 benefit_col">
+                            <div class="benefit_item d-flex flex-row align-items-center">
+                                <div class="benefit_icon"><i class="fa fa-truck" aria-hidden="true"></i></div>
+                                <div class="benefit_content">
+                                    <h6>free shipping</h6>
+                                    <p>Suffered Alteration in Some Form</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 benefit_col">
+                            <div class="benefit_item d-flex flex-row align-items-center">
+                                <div class="benefit_icon"><i class="fa fa-money" aria-hidden="true"></i></div>
+                                <div class="benefit_content">
+                                    <h6>cash on delivery</h6>
+                                    <p>The Internet Tend To Repeat</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 benefit_col">
+                            <div class="benefit_item d-flex flex-row align-items-center">
+                                <div class="benefit_icon"><i class="fa fa-undo" aria-hidden="true"></i></div>
+                                <div class="benefit_content">
+                                    <h6>45 days return</h6>
+                                    <p>Making it Look Like Readable</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 benefit_col">
+                            <div class="benefit_item d-flex flex-row align-items-center">
+                                <div class="benefit_icon"><i class="fa fa-clock-o" aria-hidden="true"></i></div>
+                                <div class="benefit_content">
+                                    <h6>opening all week</h6>
+                                    <p>8AM - 09PM</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+     <script>
+        var Productnewcartlist;
+        $(".product_favorite").click(function () {
+            var existingnewProductCookies = $.cookie('WishList');
+            if (existingnewProductCookies != undefined && existingnewProductCookies != "" && existingnewProductCookies != null) {
+                Productnewcartlist = existingnewProductCookies.split('-');
+
+
+            }
+            else {
+                Productnewcartlist = [];
+            }
+            var productnewId = $(this).attr('data-id');
+            Productnewcartlist.push(productnewId);
+            $.cookie('WishList', Productnewcartlist.join('-'), { path: '/' });
+            swal("Add To WishList!", "You Product Added to WishList!", "success");
+        });
+
+         $("#review_submit").click(function () {
+             debugger;
+             $.ajax({
+                type: 'POST',
+                url: '@Url.Action("PostRating", "Product")',
+                
+                data: $("#review_form").serialize()
+
+            }).done(function (response) {
+                $("#user_review_container").html(response);
+                $("#review_form").html("");
+                window.location = '@Url.Action("Details","Product",new { Id = Model.Products.Id})';
+
+            }).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+                swal({
+                    title: "You Can't insert this product?",
+                    text: "Please Enter All required Feild!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+            });
+        });
+            </script>
+        }
+
+                                else
+                                {
+                                <div class="container single_product_container">
+                                    <div class="row">
+                                        <div class="col">
+
+                                            <!-- Breadcrumbs -->
+
+                                            <div class="breadcrumbs d-flex flex-row align-items-center">
+                                                <ul>
+                                                    <li><a href="index.html">Home</a></li>
+                                                    <li><a href="categories.html"><i class="fa fa-angle-right" aria-hidden="true"></i>Men's</a></li>
+                                                    <li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>Single Product</a></li>
+                                                </ul>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-9 image_col order-lg-2 order-1">
+                                        <div class="single_product_image">
+                                            <div class="single_product_image_background">
+                                                <h3 class="text-danger">No Product Exist</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                }
+
+
